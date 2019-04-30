@@ -27,10 +27,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+       
+        //comment
+        
+
         
         searchButton.layer.cornerRadius = 15
         searchButton.clipsToBounds = true
         // Do any additional setup after loading the view.
+
+        
+        // Pavel
+
         tableView.delegate = self
         tableView.dataSource = self
         self.tableView.reloadData()
@@ -41,6 +50,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print(movie?.title, "banan")
             tableView.reloadData()
         }
+
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -57,6 +67,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
+
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

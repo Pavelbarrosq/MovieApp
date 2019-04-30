@@ -71,6 +71,9 @@
                                 <rect key="frame" x="333" y="119" width="46" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="searchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Owv-ed-0Og"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -83,7 +86,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="searchButton" destination="hps-8y-nXz" id="AwV-aW-eKU"/>
+                        <outlet property="searchButton" destination="hps-8y-nXz" id="dk5-CU-sAu"/>
                         <outlet property="searchField" destination="mPR-DJ-6hy" id="MUR-Gh-RlY"/>
                         <outlet property="tableView" destination="Cyg-Q6-zCU" id="ZFL-LW-E3C"/>
                     </connections>

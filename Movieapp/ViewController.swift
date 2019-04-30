@@ -19,7 +19,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let dogColorArray = [UIColor.red, UIColor.blue, UIColor.green, UIColor.orange, UIColor.purple, UIColor.yellow, UIColor.magenta]
 //    let movie = Movies(title: "", image: #imageLiteral(resourceName: "KillBill"))
     var searchText = ""
-    var movie: Movies?
+    var movie: Movie?
+    let movieList = Movies()
 
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -27,20 +28,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let avengers = Movie(title: "Avengers", image: #imageLiteral(resourceName: "Avengers"))
+        movieList.add(movie: avengers)
+       
+        
+        let killbill = Movie(title: "KillBill", image: #imageLiteral(resourceName: "KillBill"))
+        movieList.add(movie: killbill)
+        //comment
+        
+
         
         searchButton.layer.cornerRadius = 15
         searchButton.clipsToBounds = true
         // Do any additional setup after loading the view.
+
+        
+        // Pavel
+
         tableView.delegate = self
         tableView.dataSource = self
         self.tableView.reloadData()
     }
     
     @IBAction func searchButton(_ sender: Any) {
-        if searchField.text == movie?.title {
-            print(movie?.title, "banan")
+        if let name = searchField.text {
+            print(name, "banan")
+            if name == movieList.entry(index: 0)?.title {
+                print("coolt")
+            }
+            if name == movieList.entry(index: 1)?.title {
+                print("inte coolt")
+            }
+
             tableView.reloadData()
         }
+
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -57,6 +79,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
+
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -76,7 +99,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
 //        let uimage = imageArray.image(index: indexPath.row)
-
         cell.movieImage.image = imageArray[indexPath.section]
         cell.movieTitle.text = titleArray[indexPath.section]
         cell.movieTitle.backgroundColor = UIColor(red:50.0/255.0, green:50.0/255.0, blue:50.0/255.0, alpha:0.7)

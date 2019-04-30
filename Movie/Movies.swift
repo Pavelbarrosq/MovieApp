@@ -1,20 +1,31 @@
 //
-//  Movies.swift
-//  Movie
+//  Movie.swift
+//  Movieapp
 //
-//  Created by Kim Nordin on 2019-04-29.
-//  Copyright © 2019 kim. All rights reserved.
+//  Created by Kim Nordin on 2019-04-30.
+//  Copyright © 2019 Pavel Barros Quintanilla. All rights reserved.
 //
 
 import Foundation
-import UIKit
 
 class Movies {
-    var title: String
-    var image: UIImage
+
+    var list = [Movie]()
+
+    var count : Int {
+        return list.count
+    }
     
-    init(title: String, image: UIImage) {
-        self.title = title
-        self.image = image
+    func add(movie: Movie) {
+        list.append(movie)
+    }
+    
+    func entry(index: Int) -> Movie? {
+        
+        if index >= 0 && index <= list.count {
+            return list[index]
+        }
+        
+        return nil
     }
 }

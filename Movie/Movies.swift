@@ -20,6 +20,10 @@ class Movies {
         list.append(movie)
     }
     
+    func delete(index: Int){
+        list.remove(at: index)
+    }
+    
     func entry(index: Int) -> Movie? {
         
         if index >= 0 && index <= list.count {

@@ -53,12 +53,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBAction func searchButton(_ sender: Any) {
         if let name = searchField.text {
             print(name, "banan")
-            if name == movieList.entry(index: 0)?.title {
-                print("coolt")
-            }
-            if name == movieList.entry(index: 1)?.title {
-                print("inte coolt")
-            }
+            print(movieList.count)
+                for n in 0...movieList.list.count-1 {
+                    print("n är", n)
+                    if movieList.entry(index: n)?.title != name {
+                        print("suave")
+                        movieList.delete(index: n)
+                    }
+                    else {
+                        print("error")
+                    }
+                }
+//            if name == movieList.entry(index: 0)?.title {
+//                print("coolt")
+//            }
+//            if name == movieList.entry(index: 1)?.title {
+//
+//            }
 
             tableView.reloadData()
         }
@@ -78,7 +89,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return movieList.count
 
     }
 
@@ -99,8 +110,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
 //        let uimage = imageArray.image(index: indexPath.row)
-        cell.movieImage.image = imageArray[indexPath.section]
-        cell.movieTitle.text = titleArray[indexPath.section]
+        cell.movieImage.image = movieList.entry(index: indexPath.section)?.image
+        cell.movieTitle.text = movieList.entry(index: indexPath.section)?.title
         cell.movieTitle.backgroundColor = UIColor(red:50.0/255.0, green:50.0/255.0, blue:50.0/255.0, alpha:0.7)
 
         print("hej")

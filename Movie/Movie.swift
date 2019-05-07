@@ -12,9 +12,11 @@ import UIKit
 class Movie {
     var title: String
     var image: UIImage
+    var selected: Bool = true
     
-    init(title: String, image: UIImage) {
+    init(title: String, image: UIImage, selected: Bool) {
         self.title = title
         self.image = image
+        self.selected = selected
     }
 }

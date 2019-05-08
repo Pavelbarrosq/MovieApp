@@ -9,14 +9,14 @@
 import Foundation
 import UIKit
 
-class Movie {
+class Movie : Decodable {
     var title: String
-    var image: UIImage
-    var selected: Bool = true
+    var vote_average: Double
+    var poster_path: String
     
-    init(title: String, image: UIImage, selected: Bool) {
+    init(title: String, vote_average: Double, poster_path: String) {
         self.title = title
-        self.image = image
-        self.selected = selected
+        self.vote_average = vote_average
+        self.poster_path = poster_path
     }
 }

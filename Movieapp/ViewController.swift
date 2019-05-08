@@ -14,10 +14,26 @@ import UIKit
 //}
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+    
+    struct Info: Decodable {
+        let page: Int
+        let total_results: Int
+        let total_pages: Int
+        let results: [Movie]
+    }
+    
+//    struct Movie: Decodable {
+//        let title: String
+//        let vote_average: Double
+//        let poster_path: String
+//    }
+
+    
     let titleArray = ["Avengers", "Kill Bill", "Film", "Film", "Film"]
     let imageArray: [UIImage] = [#imageLiteral(resourceName: "Avengers"), #imageLiteral(resourceName: "KillBill")]
-    let dogColorArray = [UIColor.red, UIColor.blue, UIColor.green, UIColor.orange, UIColor.purple, UIColor.yellow, UIColor.magenta]
+    let tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language"
 //    let movie = Movies(title: "", image: #imageLiteral(resourceName: "KillBill"))
+
     var movie: Movie?
     var filteredMovies = Movies()
     var movies = Movies()
@@ -26,29 +42,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
-        let avengers = Movie(title: "Avengers", image: #imageLiteral(resourceName: "Avengers"), selected: true)
-        movies.add(movie: avengers)
-       
-        let killbill = Movie(title: "KillBill", image: #imageLiteral(resourceName: "KillBill"), selected: true)
-        movies.add(movie: killbill)
-        //comment
+        let jsonUrl = ("\(tmdbApi)" + "=en-US&page=1")
+        guard let url = URL(string: jsonUrl) else {return}
         
-        let bvs = Movie(title: "Batman VS Superman", image: #imageLiteral(resourceName: "BVS"), selected: true)
-        movies.add(movie: bvs)
-        
-        let evangelion = Movie(title: "Evangelion", image: #imageLiteral(resourceName: "Evangelion"), selected: true)
-        movies.add(movie: evangelion)
-        
-        let aquaman = Movie(title: "Aquaman", image: #imageLiteral(resourceName: "Aquaman"), selected: true)
-        movies.add(movie: aquaman)
-        
-        print(movies.list) //[Movieapp.Movie, Movieapp.Movie, Movieapp.Movie]
-        print(movies.list.count) //3
-        for movies in movies.list {
-            print(movies.title)
-        }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error != nil {
+                print("Error retreving data: \(error?.localizedDescription)")
+            } else {
+                print("hi")
+                guard let data = data else {return}
+                
+                do {
+                    let movieInfo = try JSONDecoder().decode(Info.self, from: data)
+                    //                    let movie = try JSONDecoder().decode([Movie].self, from: data)
+                    print("\(movieInfo.results)", " RESULTS")
+                    for each in movieInfo.results {
+                        self.movies.list.append(each)
+                    }
+                    
+                } catch {
+                    print("could not decode")
+                }
+            }
+            }.resume()
 
         filteredMovies.list = movies.list
         
@@ -96,9 +115,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func numberOfSections(in tableView: UITableView) -> Int {
         if isFiltering() == true {
             print("is filtering")
+            print("Found These Movies: ", filteredMovies.list)
             return filteredMovies.list.count
         }
         print("not filtering")
+        print("Found These Movies: ", movies.list)
         return movies.list.count
     }
 
@@ -118,7 +139,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             movie = movies.entry(index: indexPath.section)
         }
 //        let uimage = imageArray.image(index: indexPath.row)
-        cell.movieImage.image = movie?.image
+        let movieImage = movie?.poster_path
+        print(movie?.poster_path, "POSTER NAME")
+        
+        if let image = movieImage {
+            guard let url = URL(string: "http://image.tmdb.org/t/p/w185/" + image) else {print("bad url"); return UITableViewCell()}
+            URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    cell.movieImage.image = UIImage(data: data!)
+                }
+            }).resume()
+        }
         cell.movieTitle.text = movie?.title
         cell.movieTitle.backgroundColor = UIColor(red:50.0/255.0, green:50.0/255.0, blue:50.0/255.0, alpha:0.7)
 

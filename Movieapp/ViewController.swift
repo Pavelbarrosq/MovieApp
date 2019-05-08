@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 //struct Movie {
 //    var title = ""

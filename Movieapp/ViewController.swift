@@ -22,18 +22,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let total_pages: Int
         let results: [Movie]
     }
-    
-//    struct Movie: Decodable {
-//        let title: String
-//        let vote_average: Double
-//        let poster_path: String
-//    }
 
-    
-    let titleArray = ["Avengers", "Kill Bill", "Film", "Film", "Film"]
-    let imageArray: [UIImage] = [#imageLiteral(resourceName: "Avengers"), #imageLiteral(resourceName: "KillBill")]
     let tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language"
-//    let movie = Movies(title: "", image: #imageLiteral(resourceName: "KillBill"))
 
     var movie: Movie?
     var filteredMovies = Movies()
@@ -58,7 +48,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 
                 do {
                     let movieInfo = try JSONDecoder().decode(Info.self, from: data)
-                    //                    let movie = try JSONDecoder().decode([Movie].self, from: data)
                     print("\(movieInfo.results)", " RESULTS")
                     for each in movieInfo.results {
                         self.movies.list.append(each)
@@ -72,14 +61,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         filteredMovies.list = movies.list
         
-        // Pavel
-        
         searchBar.delegate = self
         searchBar.becomeFirstResponder()
         
         tableView.delegate = self
         tableView.dataSource = self
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -139,7 +128,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print("all cells")
             movie = movies.entry(index: indexPath.section)
         }
-//        let uimage = imageArray.image(index: indexPath.row)
+
         let movieImage = movie?.poster_path
         print(movie?.poster_path, "POSTER NAME")
         

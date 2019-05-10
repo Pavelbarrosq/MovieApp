@@ -12,6 +12,7 @@ class TableViewCell: UITableViewCell {
 
     @IBOutlet weak var movieTitle: UILabel!
     @IBOutlet weak var movieImage: UIImageView!
+    @IBOutlet weak var movieRating: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

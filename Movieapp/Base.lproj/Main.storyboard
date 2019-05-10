@@ -42,19 +42,33 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="r5C-xJ-ZVu">
+                                                    <rect key="frame" x="20" y="11" width="80" height="80"/>
+                                                    <color key="backgroundColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="0.54529644691780821" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="80" id="FOL-Xt-8pB"/>
+                                                        <constraint firstAttribute="width" constant="80" id="ihg-hM-uej"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                                    <color key="textColor" red="0.083156245140000001" green="1" blue="0.23380794099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="gL6-LN-oOJ" firstAttribute="leading" secondItem="Q6k-5Q-bzH" secondAttribute="leading" id="4TQ-by-GGV"/>
+                                                <constraint firstItem="r5C-xJ-ZVu" firstAttribute="leading" secondItem="Q6k-5Q-bzH" secondAttribute="leadingMargin" id="AUG-cw-EI4"/>
                                                 <constraint firstItem="gL6-LN-oOJ" firstAttribute="top" secondItem="Q6k-5Q-bzH" secondAttribute="top" id="CHA-JB-8C2"/>
                                                 <constraint firstAttribute="bottom" secondItem="gL6-LN-oOJ" secondAttribute="bottom" id="Ft8-rX-pod"/>
                                                 <constraint firstAttribute="trailing" secondItem="gL6-LN-oOJ" secondAttribute="trailing" id="P9O-QN-JPp"/>
                                                 <constraint firstAttribute="trailing" secondItem="Wdu-TU-QXH" secondAttribute="trailing" id="b3m-U8-B6U"/>
                                                 <constraint firstAttribute="bottom" secondItem="Wdu-TU-QXH" secondAttribute="bottom" id="cXS-bX-hd4"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="r5C-xJ-ZVu" secondAttribute="bottom" constant="398" id="iuI-Jk-bBY"/>
                                                 <constraint firstItem="Wdu-TU-QXH" firstAttribute="leading" secondItem="Q6k-5Q-bzH" secondAttribute="leading" id="kPC-1v-xN4"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="movieImage" destination="gL6-LN-oOJ" id="iDL-7r-OOm"/>
+                                            <outlet property="movieRating" destination="r5C-xJ-ZVu" id="d3n-gQ-pe4"/>
                                             <outlet property="movieTitle" destination="Wdu-TU-QXH" id="AD7-Rw-xmF"/>
                                         </connections>
                                     </tableViewCell>

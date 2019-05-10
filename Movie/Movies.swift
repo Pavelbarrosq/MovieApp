@@ -32,4 +32,8 @@ class Movies {
         
         return nil
     }
+    
+    func clear() {
+        list.removeAll()
+    }
 }

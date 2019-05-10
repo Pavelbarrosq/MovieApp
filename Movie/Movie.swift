@@ -13,10 +13,4 @@ class Movie : Decodable {
     var title: String
     var vote_average: Double
     var poster_path: String
-    
-    init(title: String, vote_average: Double, poster_path: String) {
-        self.title = title
-        self.vote_average = vote_average
-        self.poster_path = poster_path
-    }
 }

@@ -9,11 +9,6 @@
 import UIKit
 import SVProgressHUD
 
-//struct Movie {
-//    var title = ""
-//    var image = #imageLiteral(resourceName: "KillBill")
-//}
-
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
     struct Info: Decodable {
@@ -22,7 +17,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let total_pages: Int
         let results: [Movie]
     }
-
+    
     let tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language"
 
     var movie: Movie?
@@ -36,7 +31,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         super.viewDidLoad()
         
-        let jsonUrl = ("\(tmdbApi)" + "=en-US&page=1")
+//        Specify the API URL-Path
+        let jsonUrl = ("\(tmdbApi)"  + "=en-US&page=2")
         guard let url = URL(string: jsonUrl) else {return}
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -46,6 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 print("hi")
                 guard let data = data else {return}
                 
+//                Try fetching the API data specifed in the Info Struct
                 do {
                     let movieInfo = try JSONDecoder().decode(Info.self, from: data)
                     print("\(movieInfo.results)", " RESULTS")
@@ -59,6 +56,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             }.resume()
 
+//        On start, append all movies to the filteredMovies list
         filteredMovies.list = movies.list
         
         searchBar.delegate = self
@@ -66,6 +64,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         tableView.delegate = self
         tableView.dataSource = self
+//        Reload the TableView when data has finished downloading
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -90,6 +89,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.reloadData()
     }
     
+//    Filter movies where movie.title matches searchBar.text
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         if searchBar.text != "" {
             filteredMovies.list = movies.list.filter({( movie : Movie) -> Bool in
@@ -102,6 +102,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return 20
     }
     
+//    Return the filteredMovies list if filtering, return all Movies if not
     func numberOfSections(in tableView: UITableView) -> Int {
         if isFiltering() == true {
             print("is filtering")
@@ -146,9 +147,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }).resume()
         }
+        cell.movieRating.text = movie?.vote_average.description
+        cell.movieRating.layer.cornerRadius = cell.movieRating.frame.width/2
+        cell.movieRating.clipsToBounds = true
         cell.movieTitle.text = movie?.title
         cell.movieTitle.backgroundColor = UIColor(red:50.0/255.0, green:50.0/255.0, blue:50.0/255.0, alpha:0.7)
-
         return cell
     }
     

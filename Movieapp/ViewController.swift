@@ -17,8 +17,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let total_pages: Int
         let results: [Movie]
     }
-    
-    let tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language"
+
+    var tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
+    var jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
 
     var movie: Movie?
     var filteredMovies = Movies()
@@ -26,20 +27,51 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    
+    @IBAction func indexChanged(_ sender: Any) {
+        switch segmentedControl.selectedSegmentIndex
+        {
+        case 0:
+            jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
+            movies.clear()
+            reloadMoives()
+//            print(jsonUrl)
+        case 1:
+            jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&vote_average.gte=2.0&vote_average.lte=8.0"
+            movies.clear()
+            reloadMoives()
+//            print(jsonUrl)
+        default:
+            break
+        }
+    }
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
-//        Specify the API URL-Path
-        let jsonUrl = ("\(tmdbApi)"  + "=en-US&page=2")
+        reloadMovies()
+
+        filteredMovies.list = movies.list
+        
+        searchBar.delegate = self
+        searchBar.becomeFirstResponder()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func reloadMovies() {
+        print("€€€€€€€### JSONURL = \(jsonUrl)")
+
         guard let url = URL(string: jsonUrl) else {return}
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
                 print("Error retreving data: \(error?.localizedDescription)")
             } else {
-                print("hi")
+                //                print("hi")
                 guard let data = data else {return}
                 
 //                Try fetching the API data specifed in the Info Struct
@@ -55,6 +87,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
             }.resume()
+
 
 //        On start, append all movies to the filteredMovies list
         filteredMovies.list = movies.list
@@ -109,8 +142,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print("Found These Movies: ", filteredMovies.list)
             return filteredMovies.list.count
         }
-        print("not filtering")
-        print("Found These Movies: ", movies.list)
+//        print("not filtering")
+//        print("Found These Movies: ", movies.list)
         return movies.list.count
     }
 
@@ -122,11 +155,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         
         if isFiltering() {
-            print("filtered cells")
+//            print("filtered cells")
             movie = filteredMovies.entry(index: indexPath.section)
         }
         else {
-            print("all cells")
+//            print("all cells")
             movie = movies.entry(index: indexPath.section)
         }
 

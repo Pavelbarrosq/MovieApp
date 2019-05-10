@@ -79,6 +79,17 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="vGr-1H-bSs">
+                                <rect key="frame" x="120" y="76" width="175" height="28"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Movies"/>
+                                    <segment title="Tv-Shows"/>
+                                </segments>
+                                <connections>
+                                    <action selector="indexChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="ymz-F7-dLs"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -91,6 +102,7 @@
                     </view>
                     <connections>
                         <outlet property="searchBar" destination="9la-ag-oQ5" id="54M-H4-dYe"/>
+                        <outlet property="segmentedControl" destination="vGr-1H-bSs" id="dbC-E1-W1C"/>
                         <outlet property="tableView" destination="Cyg-Q6-zCU" id="ZFL-LW-E3C"/>
                     </connections>
                 </viewController>

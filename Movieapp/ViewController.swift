@@ -133,7 +133,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print(movie?.poster_path, "POSTER NAME")
         
         if let image = movieImage {
-            guard let url = URL(string: "http://image.tmdb.org/t/p/w185/" + image) else {print("bad url"); return UITableViewCell()}
+            guard let url = URL(string: "http://image.tmdb.org/t/p/w500/" + image) else {print("bad url"); return UITableViewCell()}
             URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
                 
                 if error != nil {

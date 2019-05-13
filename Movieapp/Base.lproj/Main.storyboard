@@ -29,7 +29,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="344" height="500"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avengers" translatesAutoresizingMaskIntoConstraints="NO" id="gL6-LN-oOJ">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="film-poster-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="gL6-LN-oOJ">
                                                     <rect key="frame" x="0.0" y="0.0" width="344" height="500"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wdu-TU-QXH">
@@ -112,6 +112,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Avengers" width="1080" height="1920"/>
+        <image name="film-poster-placeholder" width="200" height="283"/>
     </resources>
 </document>

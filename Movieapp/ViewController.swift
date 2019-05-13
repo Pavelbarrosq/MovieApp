@@ -35,12 +35,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         case 0:
             jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
             movies.clear()
-            reloadMoives()
+            reloadMovies()
 //            print(jsonUrl)
         case 1:
             jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&vote_average.gte=2.0&vote_average.lte=8.0"
             movies.clear()
-            reloadMoives()
+            reloadMovies()
 //            print(jsonUrl)
         default:
             break

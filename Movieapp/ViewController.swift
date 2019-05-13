@@ -33,14 +33,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         switch segmentedControl.selectedSegmentIndex
         {
         case 0:
-            jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
+            jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US"
             movies.clear()
-            reloadMoives()
+            reloadMovies()
 //            print(jsonUrl)
         case 1:
             jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&vote_average.gte=2.0&vote_average.lte=8.0"
             movies.clear()
-            reloadMoives()
+            reloadMovies()
 //            print(jsonUrl)
         default:
             break
@@ -54,6 +54,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         reloadMovies()
 
         filteredMovies.list = movies.list
+
+        SVProgressHUD.setDefaultStyle(SVProgressHUDStyle.dark)
+        SVProgressHUD.setDefaultMaskType(SVProgressHUDMaskType.gradient)
         
         searchBar.delegate = self
         searchBar.becomeFirstResponder()
@@ -67,6 +70,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         guard let url = URL(string: jsonUrl) else {return}
         
+        SVProgressHUD.show(withStatus: "Finding...")
+        print("progressbar")
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
                 print("Error retreving data: \(error?.localizedDescription)")
@@ -92,14 +97,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //        On start, append all movies to the filteredMovies list
         filteredMovies.list = movies.list
         
-        searchBar.delegate = self
-        searchBar.becomeFirstResponder()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
 //        Reload the TableView when data has finished downloading
         DispatchQueue.main.async {
+
             self.tableView.reloadData()
+            SVProgressHUD.dismiss()
+            print("dismissing progressbar")
         }
     }
     
@@ -119,6 +122,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterContentForSearchText(searchText)
+        if filteredMovies.count < 1 {
+            print("status progressbar")
+            SVProgressHUD.showInfo(withStatus: "Search found nothing")
+        }else{
+            SVProgressHUD.dismiss()
+        }
+        //SVProgressHUD.dismiss(withDelay: 3)
         tableView.reloadData()
     }
     

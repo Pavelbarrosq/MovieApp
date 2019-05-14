@@ -33,23 +33,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBAction func indexChanged(_ sender: Any) {
         
+       
+        let indexPath = IndexPath(row: 0, section: 0)
+        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        
+        
+        
         movies.clear()
+        filteredMovies.clear()
+        
+        self.tableView.reloadData()
         
         page = 1
+        print("INDEX CHANGED with page: \(page) and moviecount: \(movies.count)")
+        
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+
        
-        switch segmentedControl.selectedSegmentIndex
-        {
-        case 0:
-            jsonUrl =  "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page=" //
-            reloadMovies()
-//            print(jsonUrl)
-        case 1:
-            jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
-            reloadMovies()
-//            print(jsonUrl)
-        default:
-            break
+            switch self.segmentedControl.selectedSegmentIndex
+            {
+            case 0:
+                self.jsonUrl =  "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page=" //
+                self.reloadMovies()
+                //            print(jsonUrl)
+            case 1:
+                self.jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
+                self.reloadMovies()
+                //            print(jsonUrl)
+            default:
+                break
         }
+        //}
     }
     
     override func viewDidLoad() {
@@ -217,7 +231,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         //print(busyLoading)
-        if ((scrollView.contentOffset.y + 1) >= (scrollView.contentSize.height - scrollView.frame.size.height) && !busyLoading && !isFiltering()) {
+        if ((scrollView.contentOffset.y + 1) >= (scrollView.contentSize.height - scrollView.frame.size.height) && !busyLoading && !isFiltering() && movies.count > 0) {
             busyLoading = true
             print( "on page: \(page)")
             page += 1

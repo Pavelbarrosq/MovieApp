@@ -105,6 +105,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
                 print("Error retreving data: \(error?.localizedDescription)")
+                SVProgressHUD.showError(withStatus: error?.localizedDescription)
             } else {
                 //                print("hi")
                 guard let data = data else {return}

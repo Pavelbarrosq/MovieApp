@@ -44,7 +44,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             reloadMovies()
 //            print(jsonUrl)
         case 1:
-            jsonUrl = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&vote_average.gte=2.0&vote_average.lte=8.0page="
+            jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
             reloadMovies()
 //            print(jsonUrl)
         default:
@@ -70,7 +70,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
        
         
-       // filteredMovies.list = movies.list
+      // filteredMovies.list = movies.list
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,16 +80,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func reloadMovies() {
         print("€€€€€€€### JSONURL = \(jsonUrl)")
+        print("Page is : \(page)")
      
-        guard let url = URL(string: jsonUrl) else {return}
+        guard let url = URL(string: jsonUrl + String(page)) else {return}
         
-        guard let url2 = URL(string: jsonUrl + String(page)) else {return}
-        
-         print("€€€€€€€### NEW JSONURL = \(url2)")
+        print("New URL: \(url)")
         
         SVProgressHUD.show(withStatus: "Finding...")
         print("progressbar")
-        URLSession.shared.dataTask(with: url2) { (data, response, error) in
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
                 print("Error retreving data: \(error?.localizedDescription)")
             } else {
@@ -110,6 +109,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         self.tableView.reloadData()
                         SVProgressHUD.dismiss()
                         print("dismissing progressbar")
+                        //enable the loading of more movies
                         self.busyLoading = false
                     }
 
@@ -215,8 +215,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-       // let isReachingend = scrollView.contentOffset.y >= 0
-        //&& scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height)
         
         //print(busyLoading)
         if ((scrollView.contentOffset.y + 1) >= (scrollView.contentSize.height - scrollView.frame.size.height) && !busyLoading && !isFiltering()) {
@@ -225,22 +223,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             page += 1
             reloadMovies()
         }
-//        if isReachingend  && !busyLoading{
-//            busyLoading = true
-//            print( "on page: \(page)")
-//            page += 1
-//            reloadMovies()
-//
-//        }
     }
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        if indexPath.row == filteredMovies.count - 3  && !busyLoading{
-//            page += 1
-//
-//            reloadMovies()
-//        }
-//    }
-    
-    
 }
 

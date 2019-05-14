@@ -18,7 +18,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let results: [Movie]
     }
 
-   // var tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
+//    var tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
     var jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page=" //page=1&
 
     var movie: Movie?
@@ -32,20 +32,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     @IBAction func indexChanged(_ sender: Any) {
-        
-        movies.clear()
-        
+        let topIndex = IndexPath(row: 0, section: 0)
+        self.tableView.scrollToRow(at: topIndex, at: .top, animated: true)
         page = 1
-       
+        movies.clear()
+        filteredMovies.clear()
+        tableView.reloadData()
         switch segmentedControl.selectedSegmentIndex
         {
         case 0:
             jsonUrl =  "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page=" //
             reloadMovies()
+            
 //            print(jsonUrl)
         case 1:
-            jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
+            jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
             reloadMovies()
+            
 //            print(jsonUrl)
         default:
             break
@@ -105,7 +108,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                         }
                         //        On start, append all movies to the filteredMovies list
                         self.filteredMovies.list = self.movies.list
-                        print("antal movies hittade: \(self.movies.count)")
+                        print("antal movies hittade: \(self.movies.list.count)")
                         self.tableView.reloadData()
                         SVProgressHUD.dismiss()
                         print("dismissing progressbar")
@@ -188,9 +191,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //            print("all cells")
             movie = movies.entry(index: indexPath.section)
         }
-
+        let movieName = movie?.title
+        print(movieName, "MOVIE NAME")
         let movieImage = movie?.poster_path
-        print(movie?.poster_path, "POSTER NAME")
+        print(movieImage, "POSTER NAME")
         
         if let image = movieImage {
             guard let url = URL(string: "http://image.tmdb.org/t/p/w500/" + image) else {print("bad url"); return UITableViewCell()}
@@ -217,7 +221,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         //print(busyLoading)
-        if ((scrollView.contentOffset.y + 1) >= (scrollView.contentSize.height - scrollView.frame.size.height) && !busyLoading && !isFiltering()) {
+        if ((scrollView.contentOffset.y + 1) >= (scrollView.contentSize.height - scrollView.frame.size.height) && !busyLoading && !isFiltering() && movies.count > 0) {
             busyLoading = true
             print( "on page: \(page)")
             page += 1

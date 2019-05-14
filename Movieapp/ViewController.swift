@@ -32,27 +32,38 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     @IBAction func indexChanged(_ sender: Any) {
-        let topIndex = IndexPath(row: 0, section: 0)
-        self.tableView.scrollToRow(at: topIndex, at: .top, animated: true)
-        page = 1
+        
+       
+        let indexPath = IndexPath(row: 0, section: 0)
+        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+        
+        
+        
         movies.clear()
         filteredMovies.clear()
-        tableView.reloadData()
-        switch segmentedControl.selectedSegmentIndex
-        {
-        case 0:
-            jsonUrl =  "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page=" //
-            reloadMovies()
-            
-//            print(jsonUrl)
-        case 1:
-            jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
-            reloadMovies()
-            
-//            print(jsonUrl)
-        default:
-            break
+        
+        self.tableView.reloadData()
+        
+        page = 1
+        print("INDEX CHANGED with page: \(page) and moviecount: \(movies.count)")
+        
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+
+       
+            switch self.segmentedControl.selectedSegmentIndex
+            {
+            case 0:
+                self.jsonUrl =  "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page=" //
+                self.reloadMovies()
+                //            print(jsonUrl)
+            case 1:
+                self.jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
+                self.reloadMovies()
+                //            print(jsonUrl)
+            default:
+                break
         }
+        //}
     }
     
     override func viewDidLoad() {
@@ -94,6 +105,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
                 print("Error retreving data: \(error?.localizedDescription)")
+                SVProgressHUD.showError(withStatus: error?.localizedDescription)
             } else {
                 //                print("hi")
                 guard let data = data else {return}

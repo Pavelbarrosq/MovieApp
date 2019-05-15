@@ -11,21 +11,32 @@ import SVProgressHUD
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
-    struct Info: Decodable {
+    struct movieInfo: Decodable {
         let page: Int
         let total_results: Int
         let total_pages: Int
         let results: [Movie]
     }
+    
+    struct showInfo: Decodable {
+        let page: Int
+        let total_results: Int
+        let total_pages: Int
+        let results: [Show]
+    }
 
-   // var tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
+//    var tmdbApi = "https://api.themoviedb.org/3/discover/movie?api_key=d5c04206ed27091dae4a910d147726cc&language=en-US&page=1"
     var jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page=" //page=1&
 
     var movie: Movie?
-    var filteredMovies = Movies()
     var movies = Movies()
+    var filteredMovies = Movies()
+    var show: Show?
+    var shows = Shows()
+    var filteredShows = Shows()
     var page =  0
     var busyLoading = false
+    var index = 0
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -40,7 +51,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         
         movies.clear()
+        shows.clear()
         filteredMovies.clear()
+        filteredShows.clear()
         
         self.tableView.reloadData()
         
@@ -54,10 +67,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             {
             case 0:
                 self.jsonUrl =  "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page=" //
+                index = 0
                 self.reloadMovies()
                 //            print(jsonUrl)
             case 1:
-                self.jsonUrl = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
+                self.jsonUrl = "https://api.themoviedb.org/3/discover/tv?sort_by=vote_average.asc&api_key=d5c04206ed27091dae4a910d147726cc&vote_count.gte=50&page="
+                index = 1
                 self.reloadMovies()
                 //            print(jsonUrl)
             default:
@@ -88,7 +103,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     override func viewWillAppear(_ animated: Bool) {
-
          reloadMovies()
     }
     
@@ -109,28 +123,52 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             } else {
                 //                print("hi")
                 guard let data = data else {return}
-                
 //                Try fetching the API data specifed in the Info Struct
-                do {
-                    let movieInfo = try JSONDecoder().decode(Info.self, from: data)
-                    print("\(movieInfo.results)", " RESULTS")
-                    DispatchQueue.main.async {
-                        for each in movieInfo.results {
-                                self.movies.list.append(each)
+                if self.index == 0 {
+                    do {
+                        let movieData = try JSONDecoder().decode(movieInfo.self, from: data)
+                        print("\(movieData.results)", " RESULTS")
+                        DispatchQueue.main.async {
+                            for each in movieData.results {
+                                    self.movies.list.append(each)
+                            }
+                            //        On start, append all movies to the filteredMovies list
+                            self.filteredMovies.list = self.movies.list
+                            print("antal movies hittade: \(self.movies.list.count)")
+                            self.tableView.reloadData()
+                            SVProgressHUD.dismiss()
+                            print("dismissing progressbar")
+                            //enable the loading of more movies
+                            self.busyLoading = false
                         }
-                        //        On start, append all movies to the filteredMovies list
-                        self.filteredMovies.list = self.movies.list
-                        print("antal movies hittade: \(self.movies.count)")
-                        self.tableView.reloadData()
-                        SVProgressHUD.dismiss()
-                        print("dismissing progressbar")
-                        //enable the loading of more movies
-                        self.busyLoading = false
-                    }
 
-                    
-                } catch {
-                    print("could not decode")
+                        
+                    } catch {
+                        print("could not decode")
+                    }
+                }
+                else if self.index == 1 {
+                    do {
+                        let showData = try JSONDecoder().decode(showInfo.self, from: data)
+                        print("\(showData.results)", " RESULTS")
+                        DispatchQueue.main.async {
+                            for each in showData.results {
+                                self.shows.list.append(each)
+                            }
+                            //        On start, append all movies to the filteredMovies list
+                            self.filteredShows.list = self.shows.list
+                            print("antal movies hittade: \(self.shows.list.count)")
+                            self.tableView.reloadData()
+                            SVProgressHUD.dismiss()
+                            print("dismissing progressbar")
+                            //enable the loading of more movies
+                            self.busyLoading = false
+                        }
+                        
+                        
+                    } catch {
+                        print("could not decode")
+                    }
                 }
             }
             }.resume()
@@ -145,7 +183,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func isFiltering() -> Bool {
         if searchBar.text == "" {
-            filteredMovies.list = movies.list
+            if index == 0 {
+                filteredMovies.list = movies.list
+            }
+            else if index == 1 {
+                filteredShows.list = shows.list
+            }
             return false
         }
         return true
@@ -153,11 +196,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterContentForSearchText(searchText)
-        if filteredMovies.count < 1 {
-            print("status progressbar")
-            SVProgressHUD.showInfo(withStatus: "Search found nothing")
-        }else{
-            SVProgressHUD.dismiss()
+        if index == 0 {
+            if filteredMovies.count < 1 {
+                print("status progressbar")
+                SVProgressHUD.showInfo(withStatus: "Search found nothing")
+            }else{
+                SVProgressHUD.dismiss()
+            }
+        }
+        else if index == 1 {
+            if filteredShows.count < 1 {
+                print("status progressbar")
+                SVProgressHUD.showInfo(withStatus: "Search found nothing")
+            }else{
+                SVProgressHUD.dismiss()
+            }
         }
         //SVProgressHUD.dismiss(withDelay: 3)
         tableView.reloadData()
@@ -166,9 +219,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //    Filter movies where movie.title matches searchBar.text
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         if searchBar.text != "" {
-            filteredMovies.list = movies.list.filter({( movie : Movie) -> Bool in
-                return movie.title.lowercased().contains(searchText.lowercased())
-            })
+            if index == 0 {
+                filteredMovies.list = movies.list.filter({( movie : Movie) -> Bool in
+                    return movie.title.lowercased().contains(searchText.lowercased())
+                })
+            }
+            if index == 1 {
+                filteredShows.list = shows.list.filter({( show : Show) -> Bool in
+                    return show.name.lowercased().contains(searchText.lowercased())
+                })
+            }
         }
     }
     
@@ -179,13 +239,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //    Return the filteredMovies list if filtering, return all Movies if not
     func numberOfSections(in tableView: UITableView) -> Int {
         if isFiltering() == true {
-            print("is filtering")
-            print("Found These Movies: ", filteredMovies.list)
-            return filteredMovies.list.count
+            if index == 0 {
+                print("is filtering")
+                print("Found These Movies: ", filteredMovies.list)
+                return filteredMovies.list.count
+            }
+            else if index == 1 {
+                print("is filtering")
+                print("Found These Shows: ", filteredShows.list)
+                return filteredShows.list.count
+            }
         }
-//        print("not filtering")
-//        print("Found These Movies: ", movies.list)
-        return movies.list.count
+        else if isFiltering() == false {
+            if index == 0 {
+                return movies.list.count
+            }
+            else if index == 1 {
+                return shows.list.count
+            }
+        }
+        return 0
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -197,35 +270,72 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         if isFiltering() {
 //            print("filtered cells")
-            movie = filteredMovies.entry(index: indexPath.section)
+            if index == 0 {
+                movie = filteredMovies.entry(index: indexPath.section)
+            }
+            if index == 1 {
+                show = filteredShows.entry(index: indexPath.section)
+            }
         }
         else {
 //            print("all cells")
-            movie = movies.entry(index: indexPath.section)
+            if index == 0 {
+                movie = movies.entry(index: indexPath.section)
+            }
+            if index == 1 {
+                show = shows.entry(index: indexPath.section)
+            }
         }
-
-        let movieImage = movie?.poster_path
-        print(movie?.poster_path, "POSTER NAME")
+        if index == 0 {
+            let movieName = movie?.title
+            print(movieName, "MOVIE NAME")
+            let movieImage = movie?.poster_path
+            print(movieImage, "POSTER NAME")
+            
+            if let image = movieImage {
+                guard let url = URL(string: "http://image.tmdb.org/t/p/w500/" + image) else {print("bad url"); return UITableViewCell()}
+                URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                    
+                    if error != nil {
+                        print(error!)
+                        return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        cell.poster.image = UIImage(data: data!)
+                    }
+                }).resume()
+            }
+            cell.title.text = movie?.title
+            cell.rating.text = movie?.vote_average.description
+        }
+        if index == 1 {
+            let showName = show?.name
+            print(showName, "SHOW NAME")
+            let showImage = show?.poster_path
+            print(showImage, "POSTER NAME")
+            
+            if let image = showImage {
+                guard let url = URL(string: "http://image.tmdb.org/t/p/w500/" + image) else {print("bad url"); return UITableViewCell()}
+                URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                    
+                    if error != nil {
+                        print(error!)
+                        return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        cell.poster.image = UIImage(data: data!)
+                    }
+                }).resume()
+            }
+            cell.title.text = show?.name
+            cell.rating.text = show?.vote_average.description
+        }
+        cell.rating.layer.cornerRadius = cell.rating.frame.width/2
+        cell.rating.clipsToBounds = true
+        cell.title.backgroundColor = UIColor(red:50.0/255.0, green:50.0/255.0, blue:50.0/255.0, alpha:0.7)
         
-        if let image = movieImage {
-            guard let url = URL(string: "http://image.tmdb.org/t/p/w500/" + image) else {print("bad url"); return UITableViewCell()}
-            URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
-                
-                if error != nil {
-                    print(error!)
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    cell.movieImage.image = UIImage(data: data!)
-                }
-            }).resume()
-        }
-        cell.movieRating.text = movie?.vote_average.description
-        cell.movieRating.layer.cornerRadius = cell.movieRating.frame.width/2
-        cell.movieRating.clipsToBounds = true
-        cell.movieTitle.text = movie?.title
-        cell.movieTitle.backgroundColor = UIColor(red:50.0/255.0, green:50.0/255.0, blue:50.0/255.0, alpha:0.7)
         return cell
     }
     

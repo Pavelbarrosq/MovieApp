@@ -67,9 +67,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="movieImage" destination="gL6-LN-oOJ" id="iDL-7r-OOm"/>
-                                            <outlet property="movieRating" destination="r5C-xJ-ZVu" id="d3n-gQ-pe4"/>
-                                            <outlet property="movieTitle" destination="Wdu-TU-QXH" id="AD7-Rw-xmF"/>
+                                            <outlet property="poster" destination="gL6-LN-oOJ" id="iR6-MN-D5k"/>
+                                            <outlet property="rating" destination="r5C-xJ-ZVu" id="gqC-nm-j5r"/>
+                                            <outlet property="title" destination="Wdu-TU-QXH" id="lFS-w6-rth"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

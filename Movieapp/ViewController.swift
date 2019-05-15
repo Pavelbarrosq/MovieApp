@@ -342,7 +342,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         //print(busyLoading)
-        if ((scrollView.contentOffset.y + 1) >= (scrollView.contentSize.height - scrollView.frame.size.height) && !busyLoading && !isFiltering() && movies.count > 0) {
+        if ((scrollView.contentOffset.y + 1) >= (scrollView.contentSize.height - scrollView.frame.size.height) && !busyLoading && !isFiltering() && (movies.count > 0 || shows.count > 0)) {
             busyLoading = true
             print( "on page: \(page)")
             page += 1

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0FC5C1255B8B3E49B0DABA1B /* Pods_MovieappTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C93E4464D969D620F81CFCE /* Pods_MovieappTests.framework */; };
 		3B10C1C32278554F00778EDF /* Movies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B10C1C22278554F00778EDF /* Movies.swift */; };
+		3BB1619E228BF1DC00222CB5 /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB1619D228BF1DC00222CB5 /* Show.swift */; };
+		3BB161A0228BF1F800222CB5 /* Shows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB1619F228BF1F800222CB5 /* Shows.swift */; };
 		3BBDAB052278460E002C8C68 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBDAB042278460E002C8C68 /* ViewController.swift */; };
 		3BBDAB0822784637002C8C68 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBDAB0722784637002C8C68 /* Movie.swift */; };
 		3BBDAB0A22784654002C8C68 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBDAB0922784654002C8C68 /* TableViewCell.swift */; };
@@ -43,6 +45,8 @@
 		2EDF3850D9B356D39A78B745 /* Pods_MovieappUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieappUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3412D3D34352BEE4245BAD07 /* Pods-MovieappUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieappUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieappUITests/Pods-MovieappUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3B10C1C22278554F00778EDF /* Movies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movies.swift; sourceTree = "<group>"; };
+		3BB1619D228BF1DC00222CB5 /* Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Show.swift; sourceTree = "<group>"; };
+		3BB1619F228BF1F800222CB5 /* Shows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shows.swift; sourceTree = "<group>"; };
 		3BBDAB042278460E002C8C68 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3BBDAB0722784637002C8C68 /* Movie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		3BBDAB0922784654002C8C68 /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
@@ -95,13 +99,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3BBDAB062278462B002C8C68 /* Movie */ = {
+		3BBDAB062278462B002C8C68 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				3B10C1C22278554F00778EDF /* Movies.swift */,
 				3BBDAB0722784637002C8C68 /* Movie.swift */,
+				3BB1619D228BF1DC00222CB5 /* Show.swift */,
+				3B10C1C22278554F00778EDF /* Movies.swift */,
+				3BB1619F228BF1F800222CB5 /* Shows.swift */,
 			);
-			path = Movie;
+			path = Categories;
 			sourceTree = "<group>";
 		};
 		4F38C74289BE018E7C0BE3C2 /* Pods */ = {
@@ -130,7 +136,7 @@
 		CD89AFB922784135009ADD4A = {
 			isa = PBXGroup;
 			children = (
-				3BBDAB062278462B002C8C68 /* Movie */,
+				3BBDAB062278462B002C8C68 /* Categories */,
 				CD89AFC422784135009ADD4A /* Movieapp */,
 				CD89AFD922784136009ADD4A /* MovieappTests */,
 				CD89AFE422784136009ADD4A /* MovieappUITests */,
@@ -153,10 +159,10 @@
 		CD89AFC422784135009ADD4A /* Movieapp */ = {
 			isa = PBXGroup;
 			children = (
+				CD89AFC922784135009ADD4A /* Main.storyboard */,
 				CD89AFC522784135009ADD4A /* AppDelegate.swift */,
 				3BBDAB042278460E002C8C68 /* ViewController.swift */,
 				3BBDAB0922784654002C8C68 /* TableViewCell.swift */,
-				CD89AFC922784135009ADD4A /* Main.storyboard */,
 				CD89AFCC22784136009ADD4A /* Assets.xcassets */,
 				CD89AFCE22784136009ADD4A /* LaunchScreen.storyboard */,
 				CD89AFD122784136009ADD4A /* Info.plist */,
@@ -408,7 +414,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BB1619E228BF1DC00222CB5 /* Show.swift in Sources */,
 				3BBDAB052278460E002C8C68 /* ViewController.swift in Sources */,
+				3BB161A0228BF1F800222CB5 /* Shows.swift in Sources */,
 				3BBDAB0A22784654002C8C68 /* TableViewCell.swift in Sources */,
 				CD89AFC622784135009ADD4A /* AppDelegate.swift in Sources */,
 				3BBDAB0822784637002C8C68 /* Movie.swift in Sources */,

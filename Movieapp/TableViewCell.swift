@@ -24,5 +24,56 @@ class TableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    
+    func configCell(movie : Movie?){
+        let movieName = movie?.title
+        print(movieName, "MOVIE NAME")
+        let movieImage = movie?.poster_path
+        print(movieImage, "POSTER NAME")
+        
+        if let image = movieImage {
+            guard let url = URL(string: "http://image.tmdb.org/t/p/w500/" + image) else {print("bad url"); return } //UITableViewCell()
+            URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.poster.image = UIImage(data: data!)
+                }
+            }).resume()
+        }
+        title.text = movie?.title
+        rating.text = movie?.vote_average.description
+        
+    }
+    func configCell(show: Show?){
+        let showName = show?.name
+        print(showName, "SHOW NAME")
+        let showImage = show?.poster_path
+        print(showImage, "POSTER NAME")
+        
+        if let image = showImage {
+            guard let url = URL(string: "http://image.tmdb.org/t/p/w500/" + image) else {print("bad url"); return } //UITableViewCell()
+            URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+                
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.poster.image = UIImage(data: data!)
+                }
+            }).resume()
+        }
+        title.text = show?.name
+        rating.text = show?.vote_average.description
+        
+    }
+    
 
 }

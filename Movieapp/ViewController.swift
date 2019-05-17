@@ -102,6 +102,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         tableView.delegate = self
         tableView.dataSource = self
+        self.tableView.keyboardDismissMode = .onDrag
         
         SVProgressHUD.setDefaultStyle(SVProgressHUDStyle.dark)
         SVProgressHUD.setDefaultMaskType(SVProgressHUDMaskType.gradient)
@@ -215,6 +216,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.reloadData()
     }
     
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filterContentForSearchText(searchText)
         if index == 0 {
